@@ -56,3 +56,28 @@ function updateValue(key, value) {
     });
     return arguments.callee;
 })("minutes")("seconds");
+
+function startTimer() {
+    buttonManager(["start", false], ["pause", true], ["stop", true]);
+}
+
+function stopTimer() {
+    buttonManager(["start", true], ["pause", false], ["stop", false]);
+}
+
+function pauseTimer() {
+    buttonManager(["start", true], ["pause", false], ["stop", true]);
+}
+
+function buttonManager(...buttonsArray) {
+    for(let i = 0; i < buttonsArray.length; i++) {
+        let button = "#" + buttonsArray[i][0] + "-button";
+        if (buttonsArray[i][1]) {
+            $(button).removeAttr("disabled");
+        }
+            else {
+                $(button).attr("disabled", "disabled");
+            }
+        
+    }
+}
