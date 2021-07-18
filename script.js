@@ -14,7 +14,7 @@ function soundAlarm() {
         audio.play();
     }
 
-    for(let i = 0; i < amount; i++) {
+    for(let i = 1; i < amount; i++) {
         setTimeout(playSound, 1200 * i);
     }
 }
