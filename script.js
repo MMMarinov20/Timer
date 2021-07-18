@@ -38,10 +38,6 @@ function updateValue(key, value) {
 
     $("#" + key).html(value || 0);
     timerObj[key] = value;
-
-
-    console.log("Min", timerObj.minutes);
-    console.log("Sec", timerObj.seconds);
 }
 
 (function detectChanges(key) {
@@ -60,15 +56,37 @@ function updateValue(key, value) {
 function startTimer() {
     buttonManager(["start", false], ["pause", true], ["stop", true]);
     freezeInputs();
+
+    timerObj.timerId = setInterval(function() {
+        timerObj.seconds--;
+        if(timerObj.seconds < 0) {
+            if(timerObj.minutes == 0) {
+                soundAlarm();
+                return stopTimer;
+            }
+
+            timerObj.seconds = 59;
+            timerObj.minutes--;
+        }
+
+        updateValue("minutes", timerObj.minutes);
+        updateValue("seconds", timerObj.seconds);
+
+
+    }, 1000);
 }
 
 function stopTimer() {
+    clearInterval(timerObj.timerId);
     buttonManager(["start", true], ["pause", false], ["stop", false]);
     unfreezeInputs();
+    updateValue("minutes", $("#minutes-input").val());
+    updateValue("seconds", $("#seconds-input").val());
 }
 
 function pauseTimer() {
     buttonManager(["start", true], ["pause", false], ["stop", true]);
+    clearInterval(timerObj.timerId);
 }
 
 function buttonManager(...buttonsArray) {
@@ -93,3 +111,4 @@ function unfreezeInputs() {
     $("#minutes-input").removeAttr("disabled", "disabled");
     $("#seconds-input").removeAttr("disabled", "disabled");
 }
+
